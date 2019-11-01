@@ -20,13 +20,13 @@
     <parent>
         <groupId>com.okta</groupId>
         <artifactId>okta-parent</artifactId>
-        <version>14</version>
+        <version>15</version>
         <relativePath>../okta-java-parent</relativePath>
     </parent>
 
     <groupId>com.okta.sdk</groupId>
     <artifactId>okta-sdk-root</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
+    <version>1.6.0.1</version>
     <packaging>pom</packaging>
 
     <name>Okta Java SDK</name>
@@ -34,6 +34,14 @@
     <url>https://github.com/okta/okta-sdk-java</url>
     <inceptionYear>2017</inceptionYear>
 
+
+  <distributionManagement>
+    <repository>
+      <id>bintray-g4s8-maven</id>
+      <name>mvn</name>
+      <url>https://api.bintray.com/maven/g4s8/mvn/okta-sdk-impl/;publish=1</url>
+    </repository>
+  </distributionManagement>
     <properties>
         <swagger-annotations.version>1.5.8</swagger-annotations.version>
         <jackson.version>2.10.0</jackson.version>
@@ -72,27 +80,27 @@
             <dependency>
                 <groupId>com.okta.sdk</groupId>
                 <artifactId>okta-sdk-api</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0.1</version>
             </dependency>
             <dependency>
                 <groupId>com.okta.sdk</groupId>
                 <artifactId>okta-sdk-impl</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0.1</version>
             </dependency>
             <dependency>
                 <groupId>com.okta.sdk</groupId>
                 <artifactId>okta-api-swagger-templates</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0.1</version>
             </dependency>
             <dependency>
                 <groupId>com.okta.sdk</groupId>
                 <artifactId>okta-sdk-httpclient</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0.1</version>
             </dependency>
             <dependency>
                 <groupId>com.okta.sdk</groupId>
                 <artifactId>okta-sdk-okhttp</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0.1</version>
             </dependency>
 
             <!-- Other Okta Projects -->
@@ -126,14 +134,14 @@
             <dependency>
                 <groupId>com.okta.sdk</groupId>
                 <artifactId>okta-sdk-integration-tests</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0.1</version>
             </dependency>
 
             <!-- Examples -->
             <dependency>
                 <groupId>com.okta.sdk</groupId>
                 <artifactId>okta-sdk-examples-quickstart</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0.1</version>
             </dependency>
 
             <!-- Logging -->
@@ -299,7 +307,7 @@
                         <dependency>
                             <groupId>com.okta.sdk</groupId>
                             <artifactId>okta-api-swagger-templates</artifactId>
-                            <version>1.6.0-SNAPSHOT</version>
+                            <version>1.6.0.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -364,6 +372,47 @@
         </plugins>
     </build>
     <profiles>
+
+    <profile>
+      <id>publish</id>
+      <properties>
+        <javadoc.opts>-Xdoclint:none</javadoc.opts>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.10.4</version>
+            <executions>
+              <execution>
+                <id>attach-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <additionalparam>${javadoc.opts}</additionalparam>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
         <profile>
             <id>pub-docs</id>
             <build>
