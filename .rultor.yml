@@ -1,0 +1,28 @@
+# Copyright (c) 2020. SunsoftERP LLC - All Rights Reserved
+# Unauthorized copying of this file via any medium is strictly prohibited.
+# Proprietary and confidential
+---
+docker:
+  image: "g4s8/rultor:alpine"
+assets:
+  settings.xml: "sunsofterp/rultor-private-files#settings.xml"
+  settings-security.xml: "sunsofterp/rultor-private-files#settings-security.xml"
+install:
+  - mkdir -p /home/r/.m2
+  - cp /home/r/settings.xml /home/r/.m2/settings.xml
+  - echo "<settingsSecurity><relocation>/home/r/settings-security.xml</relocation></settingsSecurity>" > /home/r/.m2/settings-security.xml
+merge:
+  script:
+    - "command sudo mvn install -B -DskipITs --quiet"
+    - "command sudo mvn clean --quiet"
+    - "pdd --source=$(pwd) --verbose --file=/dev/null"
+  fast-forward: "no"
+release:
+  script:
+    - "command sudo mvn clean versions:set -DnewVersion=${tag} --quiet"
+    - "command sudo mvn deploy -B -Ppublish --quiet --settings ../settings.xml"
+deploy:
+  script:
+    - "command sudo mvn deploy -B -Ppublish --quiet --settings ../settings.xml"
+architect:
+  - "g4s8"
